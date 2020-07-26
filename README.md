@@ -75,7 +75,7 @@ For a more advanced view, we add Bollinger Band chart, % Bollinger change, Volum
 
 ![](Images/plot_2.jpeg)
 
-For a more detailed code [visit here](https://github.com/Stat-Wizards/Forcasting-a-Time-Series-Stock-Market-Data)
+For a more detailed code [visit here.](https://github.com/Stat-Wizards/Forcasting-a-Time-Series-Stock-Market-Data)
 
 ![](Images/plot_3.jpeg)
 ![](Images/plot_4.jpeg)
