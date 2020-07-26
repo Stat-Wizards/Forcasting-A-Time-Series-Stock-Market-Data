@@ -13,7 +13,7 @@
   
 ####  **Introduction**  
   
-####  **Dataset**  
+####  **Dataset and Advanced Visualizations**  
   
 ####  **Methods**
  * *ARIMA*: &nbsp; *Autoregressive Integrating Moving Average Model
