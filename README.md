@@ -6,6 +6,25 @@
 
 
 ![](Images/Intro.jpg)
+### Contents
+
+1.  **Overview**
+2.  **Introduction**
+3.  **Dataset**
+4.  **Methods**
+     - *ARIMA*: &nbsp; *Autoregressive Integrating Moving Average Model
+		   -Forecasting
+		   -Arima Results*
+     - *GARCH*: &nbsp; *Generalized Autoregressive Conditional Heteroscedastic Model
+		   -Garch Forecasting
+			 -Garch Results*
+     - *Prophet-Prophet Forecasting-Prophet Results*
+     - *K-NN regression time series forecasting*
+     - *Feed Foward Neural network*
+5.  **Result**
+6.  **Conclusion**
+
+
 ![](Images/plot_1.jpeg)
 ![](Images/plot_2.jpeg)
 ![](Images/plot_3.jpeg)
