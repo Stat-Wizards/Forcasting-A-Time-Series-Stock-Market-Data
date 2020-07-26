@@ -9,10 +9,10 @@
 
 ### Contents
 
-1.  **Overview**
-2.  **Introduction**
-3.  **Dataset**
-4.  **Methods**
+  **Overview**
+  **Introduction**
+  **Dataset**
+  **Methods**
      - *ARIMA*: &nbsp; *Autoregressive Integrating Moving Average Model
 		   -Forecasting
 		   -Arima Results*
@@ -22,8 +22,8 @@
      - *Prophet-Prophet Forecasting-Prophet Results*
      - *K-NN regression time series forecasting*
      - *Feed Foward Neural network*
-5.  **Result**
-6.  **Conclusion**
+  **Result**
+  **Conclusion**
 
 ### 1. Overview
 This project describes different time series and machine learning forecasting models applied to a real stock close price dataset. For this project we will start with a general idea of the stock price, including dataset analysis. Followed by a general description and analysis of the dataset, our objective is to apply different forecasting predictive models for “S&P500” stock daily close price. The models will be evaluated, analyzed and compared, following the main course project directions. The data will be prepared to predict the next 30 days’ close price from today. The results will be explained during the report along with concluding remarks.
