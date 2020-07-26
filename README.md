@@ -1,7 +1,7 @@
 # Forcasting of a Time Series (Stock Market) Data
-### *A Comparative Study* 
+### *A Comparative Study by,* 
 
-#### _by,_ &nbsp; _Shreyashi Saha_ _and_ _Sagarnil Bose_
+#### _Shreyashi Saha_ _and_ _Sagarnil Bose_
 
 
 
