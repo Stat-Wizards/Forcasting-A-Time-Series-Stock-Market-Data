@@ -1,1 +1,1 @@
-# Forcasting a Time Series Stock Market Data
+# Forcasting of a Time Series (Stock Market) Data
