@@ -335,7 +335,7 @@ Our Upper scenario:
 # 1369 3280.459 3369.550
 # 1370 3292.106 3391.974
 ```
-For a more detailed code [visit here.](https://github.com/Stat-Wizards/Forcasting-a-Time-Series-Stock-Market-Data)
+To get the code of the above two results [visit here.](https://github.com/Stat-Wizards/Forcasting-a-Time-Series-Stock-Market-Data)
 
 Finalizing our ARIMA model we do a quick test and train set approach dividing the close price data. We select our train set as the 70 percent of our dataset. The test set y the 30 remaining percent of the dataset.
 ```{r}
@@ -498,10 +498,57 @@ Having our model fitted, we can make a volatility plot.
 # Conditional volatility plot
 plot.ts(sigma(garch11closepricefit), ylab="sigma(t)", col="blue")
 ```
+As we can see, the last years of our data have higher peaks, explained by the economic instability in markets this last years. We can see our Akaike and other information of our model.
+```{r}
+# Model akike
+infocriteria(garch11closepricefit)
+```
+```{r}
+# Model Akaike
+# Akaike       8.768009
+# Bayes        8.802440
+# Shibata      8.767923
+# Hannan-Quinn 8.780897
+```
+
+```{r}
+# Normal residuals
+garchres <- data.frame(residuals(garch11closepricefit))
+plot(garchres$residuals.garch11closepricefit)
+```
 
 ![](Images/plot_10.jpeg)
+
+Now we proceed to calculate and plot the standardized residuals.
+```{r}
+# Standardized residuals
+garchres <- data.frame(residuals(garch11closepricefit, standardize=TRUE))
+#Normal Q plot
+qqnorm(garchres$residuals.garch11closepricefit,standardize=TRUE)
+qqline(garchres$residuals.garch11closepricefit,standardize=TRUE)
+```
+
 ![](Images/plot_11.jpeg)
+
+We see that we have some extreme values that are out of the normal distribution, but the majority of the data points are centred in the line. Having the normality plot of our standardized residuals we make a Ljung Box test to the squared standardized residuals.
+```{r}
+#Squared standardized residuals Ljung Box
+garchres <- data.frame(residuals(garch11closepricefit, standardize=TRUE)^2)
+Box.test(garchres$residuals.garch11closepricefit..standardize...TRUE..2, type="Ljung-Box")
+```
+```{r}
+# Squared Standardised Residual Ljung Box
+# Box-Ljung test
+# X-squared = 1.289, df = 1, p-value = 0.2562
+```
+With Ljung Box test we can see that our standardized squared residuals do not reject the null hypothesis, confirming that we are not having autocorrelation between them. As we found our volatility and residuals behaviour we can proceed forecasting our next 30 days and compare to the other models.
+
 ![](Images/plot_12.jpeg)
+
+To get the code of the above graph [visit here.](https://github.com/Stat-Wizards/Forcasting-a-Time-Series-Stock-Market-Data)
+
+
+
 ![](Images/plot_13.jpeg)
 ![](Images/prophet.png)
 ![](Images/plot_14.jpeg)
