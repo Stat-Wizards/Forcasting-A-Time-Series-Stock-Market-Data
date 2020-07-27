@@ -38,7 +38,7 @@ A forecasting algorithm is an information process that seeks to predict future v
 Historically, there has been a continuous interest in trying to analyze market tendencies, behavior and random reactions. This continuous concern to understand what happens before it really happens motivates us to continue with this study. Some great market traders and economists says that is almost impossible to predict stock returns or prices referring to, independence between each other, the past movements or trends cannot be used to predict future values, explained by random walk theory, skewness, kurtosis and big random component. With the new different advanced models, we will try to go against the current, because, why not? As this is a data science project this forecasting models are not considered as oracles, but are really useful for analyzing the movements of stock prices with a statistical approach. The main objective of this research is to show the models fitted, compare them and encourage the use of them.
 
 Let us firstly load the following libraries into the R environment
-```R
+```{r}
 #libraries
 library(quantmod)
 library(ggplot2)
@@ -51,7 +51,7 @@ library(tsfknn)
 If the libraries are not installed, install the required packages with `install.packages("library.name")`
 ### **Dataset and Advanced Visualizations**
 Firstly, we take a glimpse into the data.
-```R
+```{r}
 getSymbols("^GSPC",src="yahoo",from="2015-01-01",to = "2020-06-04")
 head(GSPC)
 ```
@@ -65,7 +65,7 @@ head(GSPC)
 # 2015-01-09   2063.45     2064.43     2038.33    2044.81      3364140000    2044.81
 ```
 Now, we try to visualize the close price data with the following graph
-```R
+```{r}
 chartSeries(GSPC,TA = NULL)
 ```
 ![](Images/plot_1.jpeg)
@@ -153,11 +153,11 @@ For MA models, the PACF will dampen exponentially and the ACF plot will be used 
 Once we have determined the parameters (p, d, q) we estimate the accuracy of the ARIMA model on a training data set and then use the fitted model to forecast the values of the test data set using a forecasting function. In the end, we cross check whether our forecasted values are in line with the actual values.
 
 First we conduct an ADF test for the close price set:
-```R
+```{r}
 ## ADF Test
 print(adf.test(GSPC$GSPC.Close))
 ```
-```R
+```{r}
 # Augmented Dickey-Fuller Test
 #  data:  GSPC$GSPC.Close
 #  Dickey-Fuller = -4.2322, Lag order = 11, p-value = 0.01
@@ -165,7 +165,7 @@ print(adf.test(GSPC$GSPC.Close))
 ```
 
 After the ADF test we apply ACF (Autocorrelation function) and PACF (Partial autocorrelation function) functions to the dataset.
-```R
+```{r}
 ## Plot ACF and PACF
 
 par(mfrow = c(1, 2))
@@ -182,7 +182,7 @@ Autocorrelation refers to how correlated a time series is with is past values. A
 We use ACF and PACF plot to identify the (q) order and the PACF will dampen exponentially. If we can note that it is a significant spike only at first lags, means that all the higher order autocorrelation is effectively explained by the first lag autocorrelation.
 
 Now, we fit our model to the price data.
-```R
+```{r}
 ## Applying auto.arima() to the dataset 
 modelfit <-auto.arima(GSPC$GSPC.Close, lambda = "auto")
 summary(modelfit)
@@ -190,7 +190,7 @@ summary(modelfit)
 
 We can see our model factors now.
 
-```R
+```{r}
 # Series: GSPC$GSPC.Close 
 
 # ARIMA(5,1,2) 
@@ -215,7 +215,7 @@ We can see our model factors now.
 ```
 With our model summary we can check the residuals of the model with ARIMA parameters selected
 
-```R
+```{r}
 # Diagnostics on Residuals
 plot(resid(modelfit),ylab="Residuals",main="Residuals(Arima(5,1,2)) vs. Time")
 ```
@@ -226,7 +226,7 @@ The “residuals” in a time series model are what is left over after fitting a
  &nbsp; &nbsp; &nbsp; ![](Equations/equ_3.png)
  
  As we did some correlation tests to our dataset, we now check our residuals over a normal curve.
- ```R
+ ```{r}
 # Histogram of Residuals & Normality Assumption
 hist(resid(modelfit),freq=F,ylim=c(0,9500),main="Histogram of Residuals")
 e=resid(modelfit)
@@ -236,7 +236,7 @@ curve(dnorm(x, mean=mean(e), sd=sd(e)), add=TRUE, col="darkred")
 
 As we can see, the residuals plot has a descent normal curve adjustment, giving us a good point to continue this study. Now we can make our last residuals plot, giving us the standardized residuals, ACF of residuals and p-values for Ljung-Box statistic plots.
 
-```R
+```{r}
 # Diagnostics tests for Arima
 tsdiag(modelfit)
 ```
@@ -249,21 +249,21 @@ H<sub>θ</sub>: The dataset points are independently distributed.
 With this null hypothesis, a significant p-value greater than 0.05 does not rejects the fact that the dataset points are not correlated.
 
 In the previous p-values Ljung-Box plot, we can see that in lag 1 we have a smaller p-value. Given this visual inspection we proceed to analyze this lag with an independent test.
-```R
+```{r}
 # Box test for lag=2
 Box.test(modelfit$residuals, lag= 2, type="Ljung-Box")
 ```
-```R
+```{r}
 # Box-Ljung test
 # data:  modelfit$residuals
 # X-squared = 1.1885, df = 2, p-value = 0.552
 ```
 As we can see our p-value still not rejects our null hypothesis, allowing us to make a generalized box test.
 
-```R
+```{r}
 Box.test(modelfit$residuals, type="Ljung-Box")
 ```
-```R
+```{r}
 # Box-Ljung test
 # data:  modelfit$residuals
 # X-squared = 0.76978, df = 1, p-value = 0.3803
@@ -272,7 +272,7 @@ In this generalized test we can see that our null hypothesis is still not reject
 
 Having our new ARIMA model applied and analyzed we can plot the model prediction in a red line over the real train set stock close price.
 
-```R
+```{r}
 plot(as.ts(GSPC$GSPC.Close))
 lines(modelfit$fitted,col="red")
 ```
@@ -284,7 +284,7 @@ Now with the model fitted we can proceed to forecast our daily close price value
 
 We can now plot our forecast for the next 30 days.
 
-```R
+```{r}
 plot(forecast(modelfit,h=30))
 ```
 
@@ -292,12 +292,12 @@ plot(forecast(modelfit,h=30))
 
 As we can see, we have a blue line that represents the mean of our prediction.
 
-```R
+```{r}
 price_forecast <- forecast(modelfit,h=30)
 plot(price_forecast)
 head(price_forecast$mean)
 ```
-```R
+```{r}
 # Time Series:
 #  Start = 1365 
 #  End = 1370 
@@ -308,7 +308,7 @@ head(price_forecast$mean)
 With the blue line explained we can see a darker and light darker areas, representing 80% and 95% confidence intervals respectively in lower and upper scenarios.
 
 Our lower scenario:
-```R
+```{r}
 # Time Series:
 # Start = 1365 
 # End = 1370 
@@ -322,7 +322,7 @@ Our lower scenario:
 # 1370 2956.716 2877.652
 ```
 Our Upper scenario:
-```R
+```{r}
 # Time Series:
 # Start = 1365 
 # End = 1370 
@@ -338,7 +338,7 @@ Our Upper scenario:
 For a more detailed code [visit here.](https://github.com/Stat-Wizards/Forcasting-a-Time-Series-Stock-Market-Data)
 
 Finalizing our ARIMA model we do a quick test and train set approach dividing the close price data. We select our train set as the 70 percent of our dataset. The test set y the 30 remaining percent of the dataset.
-```R
+```{r}
 # Dividing the data into train & test sets , Applying the model
 N = length (GSPC$GSPC.Close)
 n = 0.8*N
@@ -351,7 +351,7 @@ trainarima_fit <- forecast(trainarimafit, h= predlen)
 ```
 Once we have our prediction applied over the train set we plot the mean tendency of our forecasting over the test set close price move.
 
-```R
+```{r}
 #Plotting mean predicted  values vs real data
 meanvalues<- as.vector(trainarima_fit$mean)
 precios <- as.vector(test$GSPC.Close)
@@ -398,10 +398,106 @@ Autoregressive fractionally integrated moving average models are time series mod
 In contrast to the ordinary ARIMA process, the "difference parameter", d, is allowed to take non-integer values.
 
 We proceed to apply the model previously defined to the close price dataset for finding ARFIMA(autoregressive fractionally integrated moving average) parameters.
-```R
+```{r}
+# Fitting Afrima
+fitarfima = autoarfima(data = GSPC$GSPC.Close, ar.max = 5, 
+                       ma.max = 2,criterion = "AIC", method = "full")
+fitarfima$fit
+```
+```{r}
 
+*----------------------------------*
+*          ARFIMA Model Fit        *
+*----------------------------------*
+Mean Model	: ARFIMA(5,0,2)
+Distribution	: norm 
+
+Optimal Parameters
+Estimate   Std.Error  t value Pr(>|t|)
+mu    2015.42371    4.438054 454.1233 0.000000
+ar1     -0.69994    0.053413 -13.1044 0.000000
+ar2      0.97147    0.039540  24.5692 0.000000
+ar3      0.91525    0.063107  14.5031 0.000000
+ar4     -0.12205    0.035448  -3.4431 0.000575
+ar5     -0.09518    0.039793  -2.3919 0.016763
+ma1      1.62233    0.043906  36.9498 0.000000
+ma2      0.72284    0.034990  20.6587 0.000000
+sigma   28.69536    0.577512  49.6879 0.000000
+
+Robust Standard Errors:
+Estimate   Std.Error   t value Pr(>|t|)
+mu    2015.42371    5.845048 344.80877 0.000000
+ar1     -0.69994    0.150931  -4.63750 0.000004
+ar2      0.97147    0.057737  16.82585 0.000000
+ar3      0.91525    0.185642   4.93021 0.000001
+ar4     -0.12205    0.050323  -2.42537 0.015293
+ar5     -0.09518    0.104593  -0.91001 0.362818
+ma1      1.62233    0.079718  20.35094 0.000000
+ma2      0.72284    0.034451  20.98181 0.000000
+sigma   28.69536    4.091210   7.01391 0.000000
+
+Log Likelihood: -6514.02
+
+Information Criteria
+Akaike       9.5645
+Bayes        9.5990
+Shibata      9.5645
+Hannan-Quinn 9.5774
+
+Weighted Ljung-Box Test on Standardized Residuals
+statistic  p-value
+Lag [1]                              2.583 1.08e-01
+Lag[2*(p+q)+(p+q)-1][20]    38.217 0.00e+00
+Lag[4*(p+q)+(p+q)-1][34]    55.897 2.22e-16
+
+H0: No serial correlation
+
+Weighted Ljung-Box Test on Standardized Squared Residuals
+statistic p-value
+Lag[1]                      354.3       0
+Lag[2*(p+q)+(p+q)-1][2]     530.5       0
+Lag[4*(p+q)+(p+q)-1][5]     921.4       0
+
+
+ARCH LM Tests
+Statistic DoF P-Value
+ARCH Lag[2]      466.6   2       0
+ARCH Lag[5]      509.7   5       0
+ARCH Lag[10]     562.5  10       0
+
+Nyblom stability test
+
+Joint Statistic:  11.832
+Individual Statistics:             
+mu    0.09505
+ar1   2.08097
+ar2   2.15325
+ar3   1.50304
+ar4   2.67606
+ar5   2.26071
+ma1   0.02611
+ma2   0.08301
+sigma 7.01724
+
+Asymptotic Critical Values (10% 5% 1%)
+Joint Statistic:     	 2.1 2.32 2.82
+Individual Statistic:	 0.35 0.47 0.75
 ```
 
+With the parameters collected we choose ARFIMA (3,0,2) and incorporate the parameters to a GARCH model.
+
+```{r}
+# Define the model
+garch11closeprice=ugarchspec(variance.model=list(garchOrder=c(1,1)),
+                             mean.model=list(armaOrder=c(3,2)))
+# Estimate model 
+garch11closepricefit=ugarchfit(spec=garch11closeprice, data=GSPC$GSPC.Close)
+```
+Having our model fitted, we can make a volatility plot.
+```{r}
+# Conditional volatility plot
+plot.ts(sigma(garch11closepricefit), ylab="sigma(t)", col="blue")
+```
 
 ![](Images/plot_10.jpeg)
 ![](Images/plot_11.jpeg)
