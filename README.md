@@ -115,6 +115,17 @@ ARIMA stands for Autoregressive Integrated Moving Average. ARIMA is also known a
 
 ![](Equations/equ_1.png)
 
+Or,  ![](Equations/equ_2.png)
+
+Where, Y<sub>t</sub> is the differenced time series value, ϕ and θ are unknown parameters and e are independent identically distributed error terms with zero mean. Here, Y<sub>t</sub> is expressed in terms of its past values and the current and past values of error terms.
+
+The ARIMA model combines three basic methods:
+
+* **Auto Regression (AR)**: In auto-regression the values of a given time series data are regressed on their own lagged values, which is indicated by the “p” value in the model.
+* **Differencing (I for Integrated)**: This involves differencing the time series data to remove the trend and convert a non-stationary time series to a stationary one. This is indicated by the “d” value in the model. If d = 1, it looks at the difference between two time-series entries, if d = 2 it looks at the differences of the differences obtained at d =1, and so forth.
+* **Moving Average (MA)**: The MA nature of the model is represented by q values which is the number of lagged values of the error term.
+
+This model is called Autoregressive Integrated Moving Average or ARIMA (p, d, q) of Yt.  We will follow the steps enumerated below to build our model.
 
 
 ![](Images/plot_3.jpeg)
