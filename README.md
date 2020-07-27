@@ -369,6 +369,40 @@ In the red line we see our mean forecasting prediction tendency over the real cl
 
 The previous presented ARIMA model has very good results, but not as satisfying as we expected. This results biases are main explained by the volatile observations of our dataset and financial market series. This situation is a cause of concern when it comes to predicting new values. **The Generalized Autoregressive Conditional Heteroscedasticity model** have a foundation on making "Volatility clustering”. This clustering of volatility is based on there are periods with relative calm movements and periods of high volatility. This behaviour is **very typical** in the **financial stock market** data as we said and GARCH model is a very good approach to minimize the volatility effect. From evaluating GARCH models implementation we will take the normal residuals and then square them. By doing this residual plots, any volatile values will visually appear. We try to apply a standard GARCH (1, 1) model over ARMA (5,2), looking if we have improved our accuracy and model parameters.
 
+###### Autoregressive Conditional Heteroscedasticity
+The **Autoregressive Conditional Heteroscedasticity (ARCH)** model is a statistical model for time series data that describes the variance of the current error term or innovation as a function of the actual sizes of the previous time periods' error terms often the variance is related to the squares of the previous innovations. The ARCH model is appropriate when the error variance in a time series follows an autoregressive (AR) model; if an autoregressive moving average (ARMA) model is assumed for the error variance, the model is a **Generalized Autoregressive Conditional Heteroscedasticity** (GARCH) model.  
+
+To model a time series using an ARCH process, let e<sub>t</sub> denote the error terms (return residuals, with respect to a mean process), i.e. the series terms. These e<sub>t</sub> are split into a stochastic piece z<sub>t</sub> and a time-dependent standard deviation σ<sub>t</sub> characterizing the typical size of the terms so that, 
+
+ &nbsp; &nbsp; &nbsp; ![](Equations/equ_4.png)
+ 
+ The random variable z<sub>t</sub> is a strong white noise process. The series σ<sub>t</sub>^2 is modelled by,
+ 
+&nbsp; &nbsp; &nbsp; ![](Equations/equ_5.png)
+
+If an ARMA model is assumed for the error variance, the model is a generalized autoregressive conditional heteroscedasticity (GARCH) model.
+In that case, the GARCH (p, q) model (where p is the order of the GARCH terms σ^2 and q is the order of the ARCH terms e^2) , following the notation of the original paper, is given by
+
+&nbsp; &nbsp; &nbsp; ![](Equations/equ_6.png)  
+&nbsp; &nbsp; &nbsp; ![](Equations/equ_7.png)  
+&nbsp; &nbsp; &nbsp; ![](Equations/equ_8.png)  
+
+Generally, when testing for heteroscedasticity in econometric models, the best test is the White test. However, when dealing with time series data, this means to test for ARCH and GARCH errors.
+
+##### Autoregressive Fractionally Integrated Moving Average  
+
+Autoregressive fractionally integrated moving average models are time series models that generalize ARIMA (autoregressive integrated moving average) models by allowing non-integer values of the differencing parameter. These models are useful in modeling time series with long memory—that is, in which deviations from the long-run mean decay more slowly than an exponential decay. The acronyms ARFIMA or FARIMA are often used, although it is also conventional to simply extend the ARIMA (p,d,q) notation for models, by simply allowing the order of differencing, d, to take fractional values. An ARFIMA model shares the same form of representation as the ARIMA (p, d, q) process, specifically,
+
+&nbsp; &nbsp; &nbsp; ![](Equations/equ_9.png)  
+
+In contrast to the ordinary ARIMA process, the "difference parameter", d, is allowed to take non-integer values.
+
+We proceed to apply the model previously defined to the close price dataset for finding ARFIMA(autoregressive fractionally integrated moving average) parameters.
+```R
+
+```
+
+
 ![](Images/plot_10.jpeg)
 ![](Images/plot_11.jpeg)
 ![](Images/plot_12.jpeg)
