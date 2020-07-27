@@ -498,6 +498,8 @@ Having our model fitted, we can make a volatility plot.
 # Conditional volatility plot
 plot.ts(sigma(garch11closepricefit), ylab="sigma(t)", col="blue")
 ```
+![](Images/plot_10.jpeg)
+
 As we can see, the last years of our data have higher peaks, explained by the economic instability in markets this last years. We can see our Akaike and other information of our model.
 ```{r}
 # Model akike
@@ -511,13 +513,13 @@ infocriteria(garch11closepricefit)
 # Hannan-Quinn 8.780897
 ```
 
+
 ```{r}
 # Normal residuals
 garchres <- data.frame(residuals(garch11closepricefit))
 plot(garchres$residuals.garch11closepricefit)
 ```
-
-![](Images/plot_10.jpeg)
+![](Images/plot_11.jpeg)
 
 Now we proceed to calculate and plot the standardized residuals.
 ```{r}
@@ -527,8 +529,8 @@ garchres <- data.frame(residuals(garch11closepricefit, standardize=TRUE))
 qqnorm(garchres$residuals.garch11closepricefit,standardize=TRUE)
 qqline(garchres$residuals.garch11closepricefit,standardize=TRUE)
 ```
+![](Images/plot_12.jpeg)
 
-![](Images/plot_11.jpeg)
 
 We see that we have some extreme values that are out of the normal distribution, but the majority of the data points are centred in the line. Having the normality plot of our standardized residuals we make a Ljung Box test to the squared standardized residuals.
 ```{r}
@@ -543,13 +545,13 @@ Box.test(garchres$residuals.garch11closepricefit..standardize...TRUE..2, type="L
 ```
 With Ljung Box test we can see that our standardized squared residuals do not reject the null hypothesis, confirming that we are not having autocorrelation between them. As we found our volatility and residuals behaviour we can proceed forecasting our next 30 days and compare to the other models.
 
-![](Images/plot_12.jpeg)
+![](Images/plot_13.jpeg)
 
 To get the code of the above graph [visit here.](https://github.com/Stat-Wizards/Forcasting-a-Time-Series-Stock-Market-Data)
 
 
 
-![](Images/plot_13.jpeg)
+
 ![](Images/prophet.png)
 ![](Images/plot_14.jpeg)
 ![](Images/plot_15.jpeg)
