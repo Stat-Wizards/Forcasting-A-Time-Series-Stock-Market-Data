@@ -545,17 +545,72 @@ Box.test(garchres$residuals.garch11closepricefit..standardize...TRUE..2, type="L
 ```
 With Ljung Box test we can see that our standardized squared residuals do not reject the null hypothesis, confirming that we are not having autocorrelation between them. As we found our volatility and residuals behaviour we can proceed forecasting our next 30 days and compare to the other models.
 
+###### GARCH Forecasting  
+
+With the model fitted and the values forecasted we plot our data prediction.
+
 ![](Images/plot_13.jpeg)
 
-To get the code of the above graph [visit here.](https://github.com/Stat-Wizards/Forcasting-a-Time-Series-Stock-Market-Data)
+As we are using GARCH for correcting our ARIMA predictions we will not deeply evaluate this model.  
 
+To get the code of the above graph [visit here.](https://github.com/Stat-Wizards/Forcasting-a-Time-Series-Stock-Market-Data)  
 
+### **Prophet**
 
+The origin of prophet comes from the application of a forecasting model into supply chain management, sales and economics. This model helps with a statistical approach in shaping business decisions. The Prophet model has been developed by Facebook’s Core Data Science team and it is an open-source tool for business forecasting.
 
 ![](Images/prophet.png)
+
+![](Equations/equ_10.png)
+
+The Prophet model is an additive model with the components g(t) models trends, s(t) models seasonality with Fourier series, h(t) effects of holidays or large events. For this study we are not going to deeply analyze the Prophet model operations because they are too dense and deep that it requires a new independent study but we did some amount of explaining.
+
+##### Prophet Forecasting
+```{r}
+#Prophet Forecasting
+#Loading time series forecasting prophet package
+##Dataframe creation and model application
+df <- data.frame(ds = index(GSPC),
+                 y = as.numeric(GSPC[,4]))
+prophet_pred = prophet(df)
+future = make_future_dataframe(prophet_pred,periods=30)
+fcastprophet = predict(prophet_pred,future)
+```
+```{r}
+#Creating train prediction dataset to compare real data
+dataprediction = data.frame(fcastprophet$ds,fcastprophet$yhat)
+trainlen = length(GSPC$GSPC.Close)
+dataprediction = dataprediction[c(1:trainlen),]
+```
 ![](Images/plot_14.jpeg)
+
+To get the code of the above graph [visit here.](https://github.com/Stat-Wizards/Forcasting-a-Time-Series-Stock-Market-Data)  
+
+With the model applied and the forecast plotted we proceed to calculate the model performance. As we are new into this model application we will use the accuracy function to compare the real values against the estimated values of the train set. The correct approach for doing this in Prophet is to create a cross-validation process and analyse the model performance metrics, but we are trying to compare the ARIMA vs the other models with the same approach.
+
+Once we have created our dataset to compare the real data against the predicted values, we proceed to calculate the accuracy.
+
+```{r}
+#Creating Cross Validation
+accuracy(dataprediction$fcastprophet.yhat,df$y)
+
+```
+```{r}
+#                  ME     RMSE      MAE        MPE    MAPE
+# Test set 0.01260116 96.05275 64.88581 -0.1404824 2.58817
+```
+Finally for a better understanding of the dataset we can plot our prophet components divided by a trend component, weekly seasonality and yearly seasonality.
+```{r}
+prophet_plot_components(prophet_pred,fcastprophet)
+```
+
 ![](Images/plot_15.jpeg)
+
+### **KNN Regression for Time-Series Forecasting**
+
 ![](Images/knn2.png)
+
+
 ![](Images/plot_16.jpeg)
 ![](Images/feed_forward.jpg)
 ![](Images/plot_17.jpeg)
