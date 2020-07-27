@@ -56,13 +56,13 @@ getSymbols("^GSPC",src="yahoo",from="2015-01-01",to = "2020-06-04")
 head(GSPC)
 ```
 ```
->Index        GSPC.Open   GSPC.High   GSPC.Low   GSPC.Close   GSPC.Volume   GSPC.Adjusted
- 2015-01-02   2058.90     2072.36     2046.04    2058.20      2708700000    2058.20
- 2015-01-05   2054.44     2054.44     2017.34    2020.58      3799120000    2020.58
- 2015-01-06   2022.15     2030.25     1992.44    2002.61      4460110000    2002.61
- 2015-01-07   2005.55     2029.61     2005.55    2025.90      3805480000    2025.90
- 2015-01-08   2030.61     2064.08     2030.61    2062.14      3934010000    2062.14
- 2015-01-09   2063.45     2064.43     2038.33    2044.81      3364140000    2044.81
+# Index        GSPC.Open   GSPC.High   GSPC.Low   GSPC.Close   GSPC.Volume   GSPC.Adjusted
+# 2015-01-02   2058.90     2072.36     2046.04    2058.20      2708700000    2058.20
+# 2015-01-05   2054.44     2054.44     2017.34    2020.58      3799120000    2020.58
+# 2015-01-06   2022.15     2030.25     1992.44    2002.61      4460110000    2002.61
+# 2015-01-07   2005.55     2029.61     2005.55    2025.90      3805480000    2025.90
+# 2015-01-08   2030.61     2064.08     2030.61    2062.14      3934010000    2062.14
+# 2015-01-09   2063.45     2064.43     2038.33    2044.81      3364140000    2044.81
 ```
 Now, we try to visualize the close price data with the following graph
 ```R
@@ -127,13 +127,217 @@ The ARIMA model combines three basic methods:
 
 This model is called Autoregressive Integrated Moving Average or ARIMA (p, d, q) of Yt.  We will follow the steps enumerated below to build our model.
 
+**Step 1: Testing and Ensuring Stationarity**
 
+To model a time series with the Box-Jenkins approach, the series has to be stationary. A stationary time series means a time series without trend, one having a constant mean and variance over time, which makes it easy for predicting values.
+
+Testing for stationarity – We test for stationarity using the Augmented Dickey-Fuller unit root test. The p-value resulting from the ADF test has to be less than 0.05 or 5% for a time series to be stationary. If the p-value is greater than 0.05 or 5%, you conclude that the time series has a unit root which means that it is a non-stationary process.
+
+Differencing – To convert a non-stationary process to a stationary process, we apply the differencing method. Differencing a time series means finding the differences between consecutive values of a time series data. The differenced values form a new time series dataset which can be tested to uncover new correlations or other interesting statistical properties.
+
+We can apply the differencing method consecutively more than once, giving rise to the “first differences”, “second order differences”, etc.
+We apply the appropriate differencing order (d) to make a time series stationary before we can proceed to the next step.
+
+**Step 2: Identification of p and q**
+
+In this step, we identify the appropriate order of Autoregressive (AR) and Moving average (MA) processes by using the Autocorrelation function (ACF) and Partial Autocorrelation function (PACF).
+
+Identifying the p order of AR model
+For AR models, the ACF will dampen exponentially and the PACF will be used to identify the order (p) of the AR model. If we have one significant spike at lag 1 on the PACF, then we have an AR model of the order 1, i.e. AR (1). If we have significant spikes at lag 1, 2, and 3 on the PACF, then we have an AR model of the order 3, i.e. AR (3).
+
+Identifying the q order of MA model
+For MA models, the PACF will dampen exponentially and the ACF plot will be used to identify the order of the MA process. If we have one significant spike at lag 1 on the ACF, then we have an MA model of the order 1, i.e. MA (1). If we have significant spikes at lag 1, 2, and 3 on the ACF, then we have an MA model of the order 3, i.e. MA (3).
+
+**Step 3: Estimation and Forecasting**
+
+Once we have determined the parameters (p, d, q) we estimate the accuracy of the ARIMA model on a training data set and then use the fitted model to forecast the values of the test data set using a forecasting function. In the end, we cross check whether our forecasted values are in line with the actual values.
+
+First we conduct an ADF test for the close price set:
+```R
+## ADF Test
+print(adf.test(GSPC$GSPC.Close))
+```
+```R
+# Augmented Dickey-Fuller Test
+#  data:  GSPC$GSPC.Close
+#  Dickey-Fuller = -4.2322, Lag order = 11, p-value = 0.01
+#  alternative hypothesis: stationary
+```
+
+After the ADF test we apply ACF (Autocorrelation function) and PACF (Partial autocorrelation function) functions to the dataset.
+```R
+## Plot ACF and PACF
+
+par(mfrow = c(1, 2))
+acf(GSPC$GSPC.Close)
+pacf(GSPC$GSPC.Close)
+par(mfrow = c(1, 1))
+
+#dev.off()
+```
 ![](Images/plot_3.jpeg)
+
+Autocorrelation refers to how correlated a time series is with is past values. As we know in AR models the ACF will dampen exponentially. The ACF is the plot used to see the correlation between the points, up to and including the lag units. We can see that the autocorrelation is significant for large number of lags, but perhaps the autocorrelation at posterior lags are merely due to propagation of autocorrelation at the first lags.
+
+We use ACF and PACF plot to identify the (q) order and the PACF will dampen exponentially. If we can note that it is a significant spike only at first lags, means that all the higher order autocorrelation is effectively explained by the first lag autocorrelation.
+
+Now, we fit our model to the price data.
+```R
+## Applying auto.arima() to the dataset 
+modelfit <-auto.arima(GSPC$GSPC.Close, lambda = "auto")
+summary(modelfit)
+```
+
+We can see our model factors now.
+
+```R
+# Series: GSPC$GSPC.Close 
+
+# ARIMA(5,1,2) 
+
+# Box Cox transformation: lambda= -0.7182431 
+
+# Coefficients:
+
+#           ar1      ar2     ar3     ar4     ar5     ma1     ma2
+#       -1.6503  -0.8038  0.0364  0.0502  0.0434  1.5262  0.6656
+
+# s.e.   0.0863   0.0944  0.0569  0.0545  0.0362  0.0825  0.0692
+
+# sigma^2 estimated as 3.071e-09:  log likelihood=11849.61
+
+# AIC=-23683.23   AICc=-23683.12   BIC=-23641.49
+
+# Training set error measures:
+
+#                    ME     RMSE      MAE        MPE      MAPE     MASE        ACF1
+# Training set 1.211636 31.65724 17.56103 0.04474109 0.7083487 1.016037 -0.02548426
+```
+With our model summary we can check the residuals of the model with ARIMA parameters selected
+
+```R
+# Diagnostics on Residuals
+plot(resid(modelfit),ylab="Residuals",main="Residuals(Arima(5,1,2)) vs. Time")
+```
 ![](Images/plot_4.jpeg)
+
+The “residuals” in a time series model are what is left over after fitting a model. In majority of time series models, the residuals are equal to the difference between the observations and the fitted values:
+
+ &nbsp; &nbsp; &nbsp; ![](Equations/equ_3.png)
+ 
+ As we did some correlation tests to our dataset, we now check our residuals over a normal curve.
+ ```R
+# Histogram of Residuals & Normality Assumption
+hist(resid(modelfit),freq=F,ylim=c(0,9500),main="Histogram of Residuals")
+e=resid(modelfit)
+curve(dnorm(x, mean=mean(e), sd=sd(e)), add=TRUE, col="darkred")
+ ```
 ![](Images/plot_5.jpeg)
+
+As we can see, the residuals plot has a descent normal curve adjustment, giving us a good point to continue this study. Now we can make our last residuals plot, giving us the standardized residuals, ACF of residuals and p-values for Ljung-Box statistic plots.
+
+```R
+# Diagnostics tests for Arima
+tsdiag(modelfit)
+```
 ![](Images/plot_6.jpeg)
+
+With this 3 graphs we focus on the Ljung-Box p-values. For the Ljung-Box test we have that our null hypothesis is:
+
+H<sub>θ</sub>: The dataset points are independently distributed.
+
+With this null hypothesis, a significant p-value greater than 0.05 does not rejects the fact that the dataset points are not correlated.
+
+In the previous p-values Ljung-Box plot, we can see that in lag 1 we have a smaller p-value. Given this visual inspection we proceed to analyze this lag with an independent test.
+```R
+# Box test for lag=2
+Box.test(modelfit$residuals, lag= 2, type="Ljung-Box")
+```
+```R
+# Box-Ljung test
+# data:  modelfit$residuals
+# X-squared = 1.1885, df = 2, p-value = 0.552
+```
+As we can see our p-value still not rejects our null hypothesis, allowing us to make a generalized box test.
+
+```R
+Box.test(modelfit$residuals, type="Ljung-Box")
+```
+```R
+# Box-Ljung test
+# data:  modelfit$residuals
+# X-squared = 0.76978, df = 1, p-value = 0.3803
+```
+In this generalized test we can see that our null hypothesis is still not rejected, allowing us to continue our study with a solid motivation.
+
+Having our new ARIMA model applied and analyzed we can plot the model prediction in a red line over the real train set stock close price.
+
+```R
+plot(as.ts(GSPC$GSPC.Close))
+lines(modelfit$fitted,col="red")
+```
 ![](Images/plot_7.jpeg)
+
+**Arima Results**  
+
+Now with the model fitted we can proceed to forecast our daily close price values to the future. We focus on forecasting the close stock price for the next 30 days or an average month.  
+
+We can now plot our forecast for the next 30 days.
+
+```R
+plot(forecast(modelfit,h=30))
+```
+
 ![](Images/plot_8.jpeg)
+
+As we can see, we have a blue line that represents the mean of our prediction.
+
+```R
+price_forecast <- forecast(modelfit,h=30)
+plot(price_forecast)
+head(price_forecast$mean)
+```
+```R
+# Time Series:
+#  Start = 1365 
+#  End = 1370 
+#  Frequency = 1 
+#  [1] 3113.484 3120.944 3119.524 3118.773 3122.801 3116.676
+```
+
+With the blue line explained we can see a darker and light darker areas, representing 80% and 95% confidence intervals respectively in lower and upper scenarios.
+
+Our lower scenario:
+```R
+# Time Series:
+# Start = 1365 
+# End = 1370 
+# Frequency = 1 
+#           80%      95%
+# 1365 3043.480 3007.509
+# 1366 3028.100 2980.854
+# 1367 3006.451 2949.411
+# 1368 2987.954 2922.467
+# 1369 2977.728 2905.546
+# 1370 2956.716 2877.652
+```
+Our Upper scenario:
+```R
+# Time Series:
+# Start = 1365 
+# End = 1370 
+# Frequency = 1 
+#           80%      95%
+# 1365 3186.300 3226.041
+# 1366 3218.789 3272.741
+# 1367 3240.106 3307.223
+# 1368 3259.752 3338.883
+# 1369 3280.459 3369.550
+# 1370 3292.106 3391.974
+```
+For a more detailed code [visit here.](https://github.com/Stat-Wizards/Forcasting-a-Time-Series-Stock-Market-Data)
+
+
 ![](Images/plot_9.jpeg)
 ![](Images/plot_10.jpeg)
 ![](Images/plot_11.jpeg)
