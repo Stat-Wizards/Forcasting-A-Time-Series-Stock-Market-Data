@@ -337,8 +337,38 @@ Our Upper scenario:
 ```
 For a more detailed code [visit here.](https://github.com/Stat-Wizards/Forcasting-a-Time-Series-Stock-Market-Data)
 
+Finalizing our ARIMA model we do a quick test and train set approach dividing the close price data. We select our train set as the 70 percent of our dataset. The test set y the 30 remaining percent of the dataset.
+```R
+# Dividing the data into train & test sets , Applying the model
+N = length (GSPC$GSPC.Close)
+n = 0.8*N
+train = GSPC$GSPC.Close[1:n, ]
+test = GSPC$GSPC.Close[(n+1):N,]
+trainarimafit <- auto.arima(train$GSPC.Close ,lambda= "auto")
+summary(trainarimafit)
+predlen= length(test)
+trainarima_fit <- forecast(trainarimafit, h= predlen)
+```
+Once we have our prediction applied over the train set we plot the mean tendency of our forecasting over the test set close price move.
+
+```R
+#Plotting mean predicted  values vs real data
+meanvalues<- as.vector(trainarima_fit$mean)
+precios <- as.vector(test$GSPC.Close)
+plot(meanvalues, type = "l",col="red")
+lines(precios, type = "l")
+#dev.off()
+```
 
 ![](Images/plot_9.jpeg)
+
+In the red line we see our mean forecasting prediction tendency over the real close price of the stock. The tendency shows a good approach predicting the future direction of the close price.
+
+##### Garch : Generalized Autoregressive Conditional Heteroscedasticity
+###### Introduction
+
+The previous presented ARIMA model has very good results, but not as satisfying as we expected. This results biases are main explained by the volatile observations of our dataset and financial market series. This situation is a cause of concern when it comes to predicting new values. **The Generalized Autoregressive Conditional Heteroscedasticity model** have a foundation on making "Volatility clustering”. This clustering of volatility is based on there are periods with relative calm movements and periods of high volatility. This behaviour is **very typical** in the **financial stock market** data as we said and GARCH model is a very good approach to minimize the volatility effect. From evaluating GARCH models implementation we will take the normal residuals and then square them. By doing this residual plots, any volatile values will visually appear. We try to apply a standard GARCH (1, 1) model over ARMA (5,2), looking if we have improved our accuracy and model parameters.
+
 ![](Images/plot_10.jpeg)
 ![](Images/plot_11.jpeg)
 ![](Images/plot_12.jpeg)
