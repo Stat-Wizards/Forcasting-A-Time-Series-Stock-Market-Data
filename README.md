@@ -113,6 +113,7 @@ One of the main problems with divergence is that it can often signal a possible 
 
 ARIMA stands for Autoregressive Integrated Moving Average. ARIMA is also known as Box-Jenkins approach. Box and Jenkins claimed that non-stationary data can be made stationary by differencing the series, Y<sub>t</sub>. The general model for Y<sub>t</sub> is written as,
 
+![](Equations/equ_1.png)
 
 
 
