@@ -608,9 +608,114 @@ prophet_plot_components(prophet_pred,fcastprophet)
 
 ### **KNN Regression for Time-Series Forecasting**
 
-![](Images/knn2.png)
+![](Images/knn2.png)  
 
 
-![](Images/plot_16.jpeg)
-![](Images/feed_forward.jpg)
-![](Images/plot_17.jpeg)
+KNN model can be used for both classification and regression problems. The most popular application is to use it for classification problems. Now, the KNN can also be implemented on any regression task. The idea of this study is illustrating the different forecasting tools, comparing them and analysing the behaviour of predictions. Following our KNN study, we proposed it can be used for both classification and regression problems. For predicting values of new data points, the model uses ‘feature similarity’, assigning a new point to a values based on how close it resembles the points on the training set.Our main objective is trying to forecast new values of our stock price using a KNN experimental approach.  
+
+For this prediction we will use a k equals to 50 as an experimental value because we did a heuristic approach trying to find the best k value. KNN algorithms require tuning experiments but as this study is to show the different forecasting tools we will aim deeply on the application than the tuning of the model for getting the best accuracy.
+
+
+```{r}
+#Dataframe creation and model application
+df <- data.frame(ds = index(GSPC),
+                 y = as.numeric(GSPC[,4]))
+
+predknn <- knn_forecasting(df$y, h = 30, lags = 1:30, k = 50, msas = "MIMO")
+
+```{r}
+#Train set model accuracy
+ro <- rolling_origin(predknn)
+print(ro$global_accu)
+
+```{r}  
+#  RMSE      MAE     MAPE
+#  153.8021 131.9580   4.7621
+
+
+```  
+
+Using the rolling origin function, we use the model and the time series associated to assess the forecasting accuracy of the model.
+Once we have studied our model we can plot our predictions in the following graph.
+
+
+
+  
+  ```{r}  
+  autoplot(predknn)
+
+  ```
+ 
+
+
+![](Images/plot_16.jpeg)  
+
+Having this new KNN predictions graph we can now proceed to compare it with the other models. Before comparing the predictions, we will focus on our 4th model and last approach applied to forecasting with neural networks.
+
+  
+  ### **Feed-Forward Neural Networks**  
+  
+  A single hidden layer neural network is the simplest neural networks form. In this single hidden layer form there is only one layer of input nodes that send weighted inputs to a subsequent layer of receiving nodes. We fit a single hidden layer neural network model to a time series. The function model approach is to use lagged values of the time series as input data, reaching to a non-linear autoregressive model.  
+  
+  
+  
+![](Images/feed_forward.jpg)  
+ 
+ For this approach we will select the specific number of hidden nodes is half of the number of input nodes (including external regressors, if given) plus 1.We use a Box Cox lambda to ensure the residuals will be roughly homoscedastic. We forecast the next 30 values with the neural net fitted.We proceed to apply the nnetarfunction with the parameterlambda selected.  
+ 
+ 
+ ```{r}  
+ #Fitting nnetar
+lambda = BoxCox.lambda(GSPC$GSPC.Close)
+dnn_fit = nnetar(GSPC[,4],lambda=lambda)
+dnn_fit
+ ```  
+ Below is model summary of the Feed Forward Neural Networks Model.
+
+```{r}  
+#  Series: GSPC[, 4] 
+
+#  Model:  NNAR(11,6) 
+
+#  Call:   nnetar(y = GSPC[, 4], lambda = lambda)
+
+#  Average of 20 networks, each of which is
+#  a 11-6-1 network with 79 weights
+#  options were - linear output units 
+
+#  sigma^2 estimated as 1.187e-09
+
+ 
+```{r}  
+ fcast = forecast(dnn_fit,PI=T,h=30)
+autoplot(fcast)
+ ```
+ 
+![](Images/plot_17.jpeg)  
+
+```{r}  
+accuracy(dnn_fit)  
+
+```{r}  
+
+#   ME        RMSE     MAE       MPE         MAPE       MASE       ACF1
+#   0.2082332 22.74244 15.29405 -0.001138679 0.6109943  0.8848755  0.03257684
+```  
+
+ ### 	**Conclusion**
+In this study we focused in the application of different models, learning how to use them with the objective to forecast new price values. As we can see from our results, the models performed with similar future tendency predictions. All the models predicted a tendency of a higher price in 30 next days. We can conclude that the ARIMA and Neural Net models performed very well inside the prediction intervals and the accuracy metrics. The other models as they are new in this forecasting approach and the objective is to apply them in an intuitive form did not performed as well as ARIMA or Neural Net models. Maybe Prophet and KNN needs more tuning for getting more accurate results. Other very relevant point we have not mentioned is that Auto Regressive models, as they base on the past data to predict future values, tend to have an asymptotic prediction in long period future forecasts. Finally, we conclude that ARIMA and Neural Nets are the best predicting models in this scenario, while incorporating GARCH to our ARIMA approach we had very interesting results. The other models used did not performed as well as ARIMA and Neural Nets under our metrics but this could be because they may need more tuning phases and training, testing approaches or they are not as effective as the other models because of their main application use in classificatory terms more than forecasting.
+  
+  
+ ###  **Reference**    
+  
+  A. Trapletti and K. Hornik (2016). tseries: Time Series Analysis and Computational Finance. R package version 0.10-35.
+
+R. J. Hyndman(2016). forecast: Forecasting functions for time series and linear models . R package version 7.2, http://github.com/robjhyndman/forecast>.
+
+Irizzary,R., 2018,Introduction to Data Science,github page,https://rafalab.github.io/dsbook/
+
+Sean J Taylor and Benjamin Letham., 2017, Forecasting at scale, https://facebook.github.io/prophet/
+
+Alexios Ghalanos(2019). Rugarch: Univariate GARCH Models. R package version 1.4-1, http://github.com/robjhyndman/forecast>.
+ 
+  
