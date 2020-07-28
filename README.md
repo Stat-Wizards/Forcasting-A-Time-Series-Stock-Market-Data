@@ -2,7 +2,7 @@
 ### *A Comparative Study by,* 
 
 #### _Shreyashi Saha_ _and_ _Sagarnil Bose_
-###### _Masters in Statistics_
+###### _Students of Masters in Statistics_
 
 
 ![](Images/Intro.jpg)
@@ -26,9 +26,9 @@
  * *K-NN regression time series forecasting*
  * *Feed Foward Neural network*  
  
- #### **Result**  
+ #### **Conclusion**  
  
- #### **Conclusion**
+ #### **Reference**
 
 ### **Overview**
 This project describes different time series and machine learning forecasting models applied to a real stock close price dataset. For this project we will start with a general idea of the stock price, including dataset analysis. Followed by a general description and analysis of the dataset, our objective is to apply different forecasting predictive models for “S&P500” stock daily close price. The models will be evaluated, analyzed and compared, following the main course project directions. The data will be prepared to predict the next 30 days’ close price from today. The results will be explained during the report along with concluding remarks.
@@ -714,16 +714,18 @@ accuracy(dnn_fit)
 In this study we focused in the application of different models, learning how to use them with the objective to forecast new price values. As we can see from our results, the models performed with similar future tendency predictions. All the models predicted a tendency of a higher price in 30 next days. We can conclude that the ARIMA and Neural Net models performed very well inside the prediction intervals and the accuracy metrics. The other models as they are new in this forecasting approach and the objective is to apply them in an intuitive form did not performed as well as ARIMA or Neural Net models. Maybe Prophet and KNN needs more tuning for getting more accurate results. Other very relevant point we have not mentioned is that Auto Regressive models, as they base on the past data to predict future values, tend to have an asymptotic prediction in long period future forecasts. Finally, we conclude that ARIMA and Neural Nets are the best predicting models in this scenario, while incorporating GARCH to our ARIMA approach we had very interesting results. The other models used did not performed as well as ARIMA and Neural Nets under our metrics but this could be because they may need more tuning phases and training, testing approaches or they are not as effective as the other models because of their main application use in classificatory terms more than forecasting.
   
   
- ###  **Reference**    
-  
-  A. Trapletti and K. Hornik (2016). tseries: Time Series Analysis and Computational Finance. R package version 0.10-35.
+###  **Reference** 
 
-R. J. Hyndman(2016). forecast: Forecasting functions for time series and linear models . R package version 7.2, http://github.com/robjhyndman/forecast>.
+These were invaluable resources for this project.
 
-Irizzary,R., 2018,Introduction to Data Science,github page,https://rafalab.github.io/dsbook/
+A. Trapletti and K. Hornik (2016). tseries: Time Series Analysis and Computational Finance. R package version 0.10-35.
+
+R. J. Hyndman(2016). forecast: Forecasting functions for time series and linear models . R package version 7.2, http://github.com/robjhyndman/forecast.
+
+Irizzary,R., 2018,Introduction to Data Science,github page, https://rafalab.github.io/dsbook/
 
 Sean J Taylor and Benjamin Letham., 2017, Forecasting at scale, https://facebook.github.io/prophet/
 
-Alexios Ghalanos(2019). Rugarch: Univariate GARCH Models. R package version 1.4-1, http://github.com/robjhyndman/forecast>.
+Alexios Ghalanos(2019). Rugarch: Univariate GARCH Models. R package version 1.4-1, http://github.com/robjhyndman/forecast.
  
   
