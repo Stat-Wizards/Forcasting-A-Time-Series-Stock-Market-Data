@@ -26,9 +26,9 @@
  * *K-NN regression time series forecasting*
  * *Feed Foward Neural network*  
  
- #### **Conclusion**  
+  ####  **Conclusion**  
  
- #### **Reference**
+  ####  **Reference**
 
 ### **Overview**
 This project describes different time series and machine learning forecasting models applied to a real stock close price dataset. For this project we will start with a general idea of the stock price, including dataset analysis. Followed by a general description and analysis of the dataset, our objective is to apply different forecasting predictive models for “S&P500” stock daily close price. The models will be evaluated, analyzed and compared, following the main course project directions. The data will be prepared to predict the next 30 days’ close price from today. The results will be explained during the report along with concluding remarks.
@@ -658,7 +658,7 @@ Once we have studied our model we can plot our predictions in the following grap
 Having this new KNN predictions graph we can now proceed to compare it with the other models. Before comparing the predictions, we will focus on our 4th model and last approach applied to forecasting with neural networks.
 
   
-  ### **Feed-Forward Neural Networks**  
+  ###  **Feed-Forward Neural Networks**  
   
   A single hidden layer neural network is the simplest neural networks form. In this single hidden layer form there is only one layer of input nodes that send weighted inputs to a subsequent layer of receiving nodes. We fit a single hidden layer neural network model to a time series. The function model approach is to use lagged values of the time series as input data, reaching to a non-linear autoregressive model.  
   
