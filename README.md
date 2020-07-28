@@ -25,10 +25,11 @@
  * *Prophet-Prophet Forecasting-Prophet Results*
  * *K-NN regression time series forecasting*
  * *Feed Foward Neural network*  
+
+
+####  **Conclusion**  
  
-  ####  **Conclusion**  
- 
-  ####  **Reference**
+####  **Reference**
 
 ### **Overview**
 This project describes different time series and machine learning forecasting models applied to a real stock close price dataset. For this project we will start with a general idea of the stock price, including dataset analysis. Followed by a general description and analysis of the dataset, our objective is to apply different forecasting predictive models for “S&P500” stock daily close price. The models will be evaluated, analyzed and compared, following the main course project directions. The data will be prepared to predict the next 30 days’ close price from today. The results will be explained during the report along with concluding remarks.
@@ -634,7 +635,7 @@ print(ro$global_accu)
 
 
 ```{r}  
-#  RMSE      MAE     MAPE
+#      RMSE      MAE     MAPE
 #  153.8021 131.9580   4.7621
 ```  
 
@@ -658,22 +659,22 @@ Once we have studied our model we can plot our predictions in the following grap
 Having this new KNN predictions graph we can now proceed to compare it with the other models. Before comparing the predictions, we will focus on our 4th model and last approach applied to forecasting with neural networks.
 
   
- ###  **Feed-Forward Neural Networks**  
+###  **Feed-Forward Neural Networks**  
   
-  A single hidden layer neural network is the simplest neural networks form. In this single hidden layer form there is only one layer of input nodes that send weighted inputs to a subsequent layer of receiving nodes. We fit a single hidden layer neural network model to a time series. The function model approach is to use lagged values of the time series as input data, reaching to a non-linear autoregressive model.  
+A single hidden layer neural network is the simplest neural networks form. In this single hidden layer form there is only one layer of input nodes that send weighted inputs to a subsequent layer of receiving nodes. We fit a single hidden layer neural network model to a time series. The function model approach is to use lagged values of the time series as input data, reaching to a non-linear autoregressive model.  
   
   
   
 ![](Images/feed_forward.jpg)  
  
- For this approach we will select the specific number of hidden nodes is half of the number of input nodes (including external regressors, if given) plus 1.We use a Box Cox lambda to ensure the residuals will be roughly homoscedastic. We forecast the next 30 values with the neural net fitted.We proceed to apply the nnetarfunction with the parameterlambda selected.  
+For this approach we will select the specific number of hidden nodes is half of the number of input nodes (including external regressors, if given) plus 1.We use a Box Cox lambda to ensure the residuals will be roughly homoscedastic. We forecast the next 30 values with the neural net fitted.We proceed to apply the nnetarfunction with the parameterlambda selected.  
  
  
  ```{r}  
  #Fitting nnetar
-lambda = BoxCox.lambda(GSPC$GSPC.Close)
-dnn_fit = nnetar(GSPC[,4],lambda=lambda)
-dnn_fit
+ lambda = BoxCox.lambda(GSPC$GSPC.Close)
+ dnn_fit = nnetar(GSPC[,4],lambda=lambda)
+ dnn_fit
  ```  
  Below is model summary of the Feed Forward Neural Networks Model.
 
@@ -695,18 +696,18 @@ dnn_fit
  
 ```{r}  
  fcast = forecast(dnn_fit,PI=T,h=30)
-autoplot(fcast)
+ autoplot(fcast)
  ```
  
 ![](Images/plot_17.jpeg)  
 
 ```{r}  
-accuracy(dnn_fit)  
+ accuracy(dnn_fit)  
 ```  
 
 ```{r}  
 
-#   ME        RMSE     MAE       MPE         MAPE       MASE       ACF1
+#          ME        RMSE     MAE       MPE         MAPE       MASE       ACF1
 #   0.2082332 22.74244 15.29405 -0.001138679 0.6109943  0.8848755  0.03257684
 ```  
 
