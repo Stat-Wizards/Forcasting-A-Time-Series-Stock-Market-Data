@@ -658,7 +658,7 @@ Once we have studied our model we can plot our predictions in the following grap
 Having this new KNN predictions graph we can now proceed to compare it with the other models. Before comparing the predictions, we will focus on our 4th model and last approach applied to forecasting with neural networks.
 
   
-  ###  **Feed-Forward Neural Networks**  
+ ###  **Feed-Forward Neural Networks**  
   
   A single hidden layer neural network is the simplest neural networks form. In this single hidden layer form there is only one layer of input nodes that send weighted inputs to a subsequent layer of receiving nodes. We fit a single hidden layer neural network model to a time series. The function model approach is to use lagged values of the time series as input data, reaching to a non-linear autoregressive model.  
   
@@ -710,7 +710,7 @@ accuracy(dnn_fit)
 #   0.2082332 22.74244 15.29405 -0.001138679 0.6109943  0.8848755  0.03257684
 ```  
 
- ###  **Conclusion**
+###  **Conclusion**
 In this study we focused in the application of different models, learning how to use them with the objective to forecast new price values. As we can see from our results, the models performed with similar future tendency predictions. All the models predicted a tendency of a higher price in 30 next days. We can conclude that the ARIMA and Neural Net models performed very well inside the prediction intervals and the accuracy metrics. The other models as they are new in this forecasting approach and the objective is to apply them in an intuitive form did not performed as well as ARIMA or Neural Net models. Maybe Prophet and KNN needs more tuning for getting more accurate results. Other very relevant point we have not mentioned is that Auto Regressive models, as they base on the past data to predict future values, tend to have an asymptotic prediction in long period future forecasts. Finally, we conclude that ARIMA and Neural Nets are the best predicting models in this scenario, while incorporating GARCH to our ARIMA approach we had very interesting results. The other models used did not performed as well as ARIMA and Neural Nets under our metrics but this could be because they may need more tuning phases and training, testing approaches or they are not as effective as the other models because of their main application use in classificatory terms more than forecasting.
   
   
