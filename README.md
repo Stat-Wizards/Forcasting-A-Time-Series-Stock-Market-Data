@@ -623,17 +623,22 @@ df <- data.frame(ds = index(GSPC),
 
 predknn <- knn_forecasting(df$y, h = 30, lags = 1:30, k = 50, msas = "MIMO")
 
+```  
+
+
 ```{r}
 #Train set model accuracy
 ro <- rolling_origin(predknn)
 print(ro$global_accu)
+```  
+
 
 ```{r}  
 #  RMSE      MAE     MAPE
 #  153.8021 131.9580   4.7621
-
-
 ```  
+
+ 
 
 Using the rolling origin function, we use the model and the time series associated to assess the forecasting accuracy of the model.
 Once we have studied our model we can plot our predictions in the following graph.
@@ -685,6 +690,8 @@ dnn_fit
 
 #  sigma^2 estimated as 1.187e-09
 
+```  
+
  
 ```{r}  
  fcast = forecast(dnn_fit,PI=T,h=30)
@@ -695,6 +702,7 @@ autoplot(fcast)
 
 ```{r}  
 accuracy(dnn_fit)  
+```  
 
 ```{r}  
 
