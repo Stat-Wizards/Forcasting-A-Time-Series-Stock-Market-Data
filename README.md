@@ -1,4 +1,4 @@
-# Forcasting of a Time Series (Stock Market) Data in R
+# Forecasting of a Time Series (Stock Market) Data in R
 ### *A Comparative Study by,* 
 
 #### _Shreyashi Saha_ _and_ _Sagarnil Bose_
